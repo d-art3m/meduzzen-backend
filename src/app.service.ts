@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
+import {
+  HealthCheckDetail,
+  HealthCheckResult,
+  HealthCheckResponse,
+} from './types/health-check.types';
 
 @Injectable()
 export class AppService {
-  healthCheck() {
+  public async healthCheck(): Promise<HealthCheckResponse> {
     return {
-      status_code: 200,
-      detail: 'ok',
-      result: 'working',
+      status_code: HttpStatus.OK,
+      detail: HealthCheckDetail.OK,
+      result: HealthCheckResult.WORKING,
     };
   }
 }
