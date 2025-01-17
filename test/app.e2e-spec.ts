@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import {
+  HealthCheckDetail,
+  HealthCheckResult,
+} from './../src/types/health-check.types';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -17,9 +21,9 @@ describe('AppController (e2e)', () => {
 
   it('/ (GET)', () => {
     return request(app.getHttpServer()).get('/').expect(200).expect({
-      status_code: 200,
-      detail: 'ok',
-      result: 'working',
+      status_code: HttpStatus.OK,
+      detail: HealthCheckDetail.OK,
+      result: HealthCheckResult.WORKING,
     });
   });
 });
