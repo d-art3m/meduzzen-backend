@@ -30,6 +30,8 @@ npm install
 ```bash
 # The port on which the app will run (default: 3000)
 PORT = *
+# The URL of the client application (CORS origin) that is allowed to access the API
+CLIENT_URL = *
 ```
 ## Compile and run the project
 
@@ -55,4 +57,44 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Running the Application with Docker
+
+### 1. Production Mode
+To run the application in production mode
+
+Build the Docker image:
+```bash
+docker build -t meduzzen-backend .
+```
+
+Run the container:
+```bash
+docker run -p 3000:3000 meduzzen-backend
+```
+
+### 2. Development Mode
+
+To start the application in development mode with Docker Compose
+
+Use the provided `docker-compose.yml` file.
+
+Start the services:
+
+```bash
+docker-compose up --build
+```
+
+To stop the application:
+
+```bash
+docker-compose down
+```
+
+### 3. Testing
+To run tests within the Docker container:
+
+```bash
+docker-compose run test
 ```

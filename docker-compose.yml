@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  app:
+    build: 
+      dockerfile: Dockerfile
+      context: .
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:${PORT}"
+  test:
+    build: 
+      dockerfile: Dockerfile
+      context: .
+    command: npm run test
