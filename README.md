@@ -30,6 +30,8 @@ npm install
 ```bash
 # The port on which the app will run (default: 3000)
 PORT = *
+# The URL of the client application (CORS origin) that is allowed to access the API
+CLIENT_URL = *
 ```
 ## Compile and run the project
 
