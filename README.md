@@ -29,9 +29,15 @@ npm install
 4. Open the `.env` file and configure the following environment variables:
 ```bash
 # The port on which the app will run (default: 3000)
-PORT = *
+PORT = 
 # The URL of the client application (CORS origin) that is allowed to access the API
-CLIENT_URL = *
+CLIENT_URL = 
+# Database connection parameters
+DB_HOST = 
+DB_PORT = 
+DB_USERNAME = 
+DB_PASSWORD = 
+DB_NAME = 
 ```
 ## Compile and run the project
 
