@@ -104,3 +104,28 @@ To run tests within the Docker container:
 ```bash
 docker-compose run test
 ```
+
+## Database Migrations
+
+The project uses TypeORM for database migrations. Below are the available migration commands:
+
+### Run pending migrations
+```bash
+npm run migration:run
+```
+
+### Generate a new migration
+```bash
+npm run migration:generate --name=migrationName
+```
+(Replace `migrationName` with your desired migration name.)
+
+### Create an empty migration
+```bash
+npm run migration:create --name=migrationName
+```
+
+### Revert the last migration
+```bash
+npm run migration:revert
+```
