@@ -45,6 +45,13 @@ export class UserService {
     const savedUser = await this.userRepository.save(user);
 
     if (auth) {
+      const existingAuth = await this.authRepository.findOne({
+        where: { login: auth.login },
+      });
+      if (existingAuth) {
+        throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
+      }
+
       const hashedPassword = await bcrypt.hash(auth.password, 10);
       const newAuth = this.authRepository.create({
         userId: savedUser.id,
