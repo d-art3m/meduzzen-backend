@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import * as jwksRsa from 'jwks-rsa';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class Auth0Strategy extends PassportStrategy(Strategy, 'auth0') {
-  constructor() {
+  constructor(private readonly userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       audience: process.env.AUTH0_AUDIENCE,
@@ -21,6 +22,13 @@ export class Auth0Strategy extends PassportStrategy(Strategy, 'auth0') {
   }
 
   async validate(payload: any) {
-    return { id: payload.sub, email: payload.email, name: payload.name };
+    let user = await this.userService.findByEmail(payload.email);
+
+    if (!user) {
+      const name = payload.name || payload.email.split('@')[0];
+      user = await this.userService.createUser({ name, email: payload.email });
+    }
+
+    return { id: user.id, email: user.email, name: user.name };
   }
 }

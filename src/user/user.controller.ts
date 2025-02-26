@@ -4,25 +4,24 @@ import {
   Delete,
   Get,
   Param,
-  Post,
   Put,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GetUser } from '../decorators/get-user.decorator';
+import { User } from './entities/user.entity';
+import { MultiAuthGuard } from '../auth/guards/multi-auth.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
-  getProfile(@Request() req: any) {
-    return req.user;
+  @UseGuards(MultiAuthGuard)
+  getProfile(@GetUser() user: User) {
+    return user;
   }
 
   @Get()
@@ -41,14 +40,6 @@ export class UserController {
   @ApiResponse({ status: 404, description: 'User not found' })
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
-  }
-
-  @Post()
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiResponse({ status: 201, description: 'User created successfully' })
-  @ApiResponse({ status: 400, description: 'Email already exists' })
-  createUser(@Body() dto: CreateUserDto) {
-    return this.userService.createUser(dto);
   }
 
   @Put(':id')

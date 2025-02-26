@@ -1,12 +1,16 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signin.dto';
-import { Auth0Guard } from './guards/auth0.guard';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post('signin')
   @ApiOperation({ summary: 'Sign in using login and password' })
@@ -16,11 +20,11 @@ export class AuthController {
     return this.authService.signIn(signInDto);
   }
 
-  @Post('auth0')
-  @ApiOperation({ summary: 'Sign in using Auth0' })
-  @ApiResponse({ status: 200, description: 'User authenticated via Auth0' })
-  @UseGuards(Auth0Guard)
-  async auth0SignIn(@Request() req: any) {
-    return this.authService.signInAuth0(req.user);
+  @Post('signup')
+  @ApiOperation({ summary: 'Sign up (create a new user)' })
+  @ApiResponse({ status: 201, description: 'User created successfully' })
+  @ApiResponse({ status: 400, description: 'Email already exists' })
+  createUser(@Body() dto: CreateUserDto) {
+    return this.userService.createUser(dto);
   }
 }

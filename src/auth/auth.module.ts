@@ -8,6 +8,10 @@ import { Auth } from './entities/auth.entity';
 import { User } from 'src/user/entities/user.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { Auth0Strategy } from './strategies/auth0.strategy';
+import { UserService } from 'src/user/user.service';
+import { MultiAuthGuard } from './guards/multi-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Auth0Guard } from './guards/auth0.guard';
 
 @Module({
   imports: [
@@ -19,6 +23,15 @@ import { Auth0Strategy } from './strategies/auth0.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, Auth0Strategy],
+  providers: [
+    AuthService,
+    UserService,
+    JwtStrategy,
+    Auth0Strategy,
+    Auth0Guard,
+    JwtAuthGuard,
+    MultiAuthGuard,
+  ],
+  exports: [Auth0Guard, JwtAuthGuard, MultiAuthGuard],
 })
 export class AuthModule {}
