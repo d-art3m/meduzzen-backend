@@ -45,8 +45,9 @@ DB_USERNAME =
 DB_PASSWORD = 
 DB_NAME = 
 
-# JWT Secret key for signing tokens
+# JWT Secret keys for signing tokens
 JWT_SECRET = 
+REFRESH_TOKEN_SECRET = 
 
 # Auth0 configuration
 AUTH0_DOMAIN = 

@@ -28,8 +28,35 @@ export class AuthService {
       email: userAuth.user.email,
       name: userAuth.user.name,
     };
+
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '1h',
+      secret: process.env.JWT_SECRET,
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: '7d',
+      secret: process.env.REFRESH_TOKEN_SECRET,
+    });
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: accessToken,
+      refresh_token: refreshToken,
     };
+  }
+
+  async refreshAccessToken(refreshToken: string) {
+    const payload = this.jwtService.verify(refreshToken, {
+      secret: process.env.REFRESH_TOKEN_SECRET,
+    });
+    const newPayload = {
+      sub: payload.sub,
+      email: payload.email,
+      name: payload.name,
+    };
+    const newAccessToken = this.jwtService.sign(newPayload, {
+      expiresIn: '1h',
+    });
+    return { access_token: newAccessToken };
   }
 }
