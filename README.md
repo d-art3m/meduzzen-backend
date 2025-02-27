@@ -2,6 +2,10 @@
 
 This is a backend API for managing quizzes.
 
+## Swagger API Documentation
+
+https://meduzzen-backend-3edx.onrender.com/api
+
 ## Tech Stack
 
 - NestJS
@@ -30,14 +34,24 @@ npm install
 ```bash
 # The port on which the app will run (default: 3000)
 PORT = 
+
 # The URL of the client application (CORS origin) that is allowed to access the API
 CLIENT_URL = 
+
 # Database connection parameters
 DB_HOST = 
 DB_PORT = 
 DB_USERNAME = 
 DB_PASSWORD = 
 DB_NAME = 
+
+# JWT Secret keys for signing tokens
+JWT_SECRET = 
+REFRESH_TOKEN_SECRET = 
+
+# Auth0 configuration
+AUTH0_DOMAIN = 
+AUTH0_AUDIENCE = 
 ```
 ## Compile and run the project
 

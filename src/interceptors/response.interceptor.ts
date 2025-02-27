@@ -17,9 +17,7 @@ export class ResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => ({
         status_code: response.statusCode,
-        detail: {
-          data,
-        },
+        detail: data,
         result: HealthCheckResult.WORKING,
       })),
       catchError((err) => {

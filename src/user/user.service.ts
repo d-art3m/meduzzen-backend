@@ -30,6 +30,10 @@ export class UserService {
     return user;
   }
 
+  async findByEmail(email: string): Promise<User> {
+    return await this.userRepository.findOne({ where: { email } });
+  }
+
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { name, email, auth } = createUserDto;
 
@@ -45,6 +49,13 @@ export class UserService {
     const savedUser = await this.userRepository.save(user);
 
     if (auth) {
+      const existingAuth = await this.authRepository.findOne({
+        where: { login: auth.login },
+      });
+      if (existingAuth) {
+        throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
+      }
+
       const hashedPassword = await bcrypt.hash(auth.password, 10);
       const newAuth = this.authRepository.create({
         userId: savedUser.id,
