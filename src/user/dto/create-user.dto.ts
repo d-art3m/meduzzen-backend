@@ -1,17 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Auth } from 'src/auth/entities/auth.entity';
+import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, ValidateNested } from 'class-validator';
+import { CreateUserAuthDto } from './create-user-auth.dto';
 
 export class CreateUserDto {
   @ApiProperty({
     description: 'The name of the user',
     example: 'John Doe',
   })
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty({
     description: 'The email address of the user',
     example: 'john.doe@example.com',
   })
+  @IsEmail()
   email: string;
 
   @ApiProperty({
@@ -19,5 +23,7 @@ export class CreateUserDto {
     required: false,
     example: { login: 'johndoe', password: 'password123' },
   })
-  auth?: Auth;
+  @ValidateNested()
+  @Type(() => CreateUserAuthDto)
+  auth?: CreateUserAuthDto;
 }

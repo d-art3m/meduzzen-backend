@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { PaginationDto } from 'src/types/pagination.dto';
+import { PaginatedResult } from 'src/types/paginated-result';
 
 @Injectable()
 export class UserService {
@@ -16,8 +18,17 @@ export class UserService {
     private readonly authRepository: Repository<Auth>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+  async findAll(paginationDto: PaginationDto): Promise<PaginatedResult<User>> {
+    const page = paginationDto.page || 1;
+    const limit = paginationDto.limit || 10;
+    const skip = (page - 1) * limit;
+
+    const [items, total] = await this.userRepository.findAndCount({
+      skip,
+      take: limit,
+    });
+
+    return { items, total };
   }
 
   async findOne(id: string): Promise<User> {
@@ -71,8 +82,23 @@ export class UserService {
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.findOne(id);
-    return await this.userRepository.save(Object.assign(user, updateUserDto));
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['auth'],
+    });
+
+    if (updateUserDto.name) {
+      user.name = updateUserDto.name;
+    }
+
+    if (updateUserDto.auth?.password && user.auth) {
+      user.auth.password = await bcrypt.hash(updateUserDto.auth.password, 10);
+
+      const savedAuth = await this.authRepository.save(user.auth);
+      user.auth = savedAuth;
+    }
+
+    return await this.userRepository.save(user);
   }
 
   async deleteUser(id: string): Promise<User> {
