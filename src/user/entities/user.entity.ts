@@ -1,8 +1,10 @@
 import { Auth } from 'src/auth/entities/auth.entity';
+import { Company } from 'src/company/entities/company.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -21,6 +23,9 @@ export class User {
 
   @OneToOne(() => Auth, (auth) => auth.user)
   auth?: Auth;
+
+  @OneToMany(() => Company, (company) => company.owner)
+  companies: Company[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
