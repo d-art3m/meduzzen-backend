@@ -26,6 +26,7 @@ export class UserService {
     const [items, total] = await this.userRepository.findAndCount({
       skip,
       take: limit,
+      order: { createdAt: 'ASC' },
     });
 
     return { items, total };
