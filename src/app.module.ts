@@ -7,6 +7,7 @@ import typeorm from './config/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { CompanyModule } from './company/company.module';
+import { QuizModule } from './quiz/quiz.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CompanyModule } from './company/company.module';
     UserModule,
     AuthModule,
     CompanyModule,
+    QuizModule,
   ],
   controllers: [AppController],
   providers: [AppService],

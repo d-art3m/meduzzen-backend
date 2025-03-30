@@ -28,7 +28,7 @@ export class CompanyService {
       skip,
       take: limit,
       relations: ['owner'],
-      order: { createdAt: 'ASC' },
+      order: { createdAt: 'DESC' },
     });
     return { items, total };
   }
@@ -48,7 +48,7 @@ export class CompanyService {
       skip,
       take: limit,
       relations: ['owner'],
-      order: { createdAt: 'ASC' },
+      order: { createdAt: 'DESC' },
     });
     return { items, total };
   }
